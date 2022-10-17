@@ -1,13 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:bmi_calculator/icon_content.dart';
+import 'package:bmi_calculator/reusable_card.dart';
+
 const bottomContainerHeight=80.0;
 final activeColour=Color(0xFF1D1E33);
+const inActiveCardColour=Color(0xFF111328);
 final bottomContainerColour=Colors.purple[100];
+
 class InputPage extends StatefulWidget {
   @override
   _InputPageState createState() => _InputPageState();
 }
 class _InputPageState extends State<InputPage> {
+  Color maleCardColour=inActiveCardColour;
+  Color femaleCardColour=inActiveCardColour;
+  //1=male 2=female
+  void updateColour(int gender){
+if(gender==1){
+  if(maleCardColour==inActiveCardColour){
+    maleCardColour=activeColour;
+  }else{
+    maleCardColour=inActiveCardColour;
+  }
+}
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,13 +39,21 @@ class _InputPageState extends State<InputPage> {
         children: [
           Expanded(child: Row(
             children: [
-              Expanded(child: Reusable(
-          colour:activeColour,
-                cardChild: IconAdd(),
+              Expanded(child: GestureDetector(
+                onTap: (){
+                 setState(() {
+                   updateColour(1);
+                 });
+                },
+                child: Reusable(
+          colour:maleCardColour,
+                  cardChild: IconAdd(icon: FontAwesomeIcons.mars,label: "MALE",),
           ),
               ),
+              ),
               Expanded(child: Reusable(
-                colour:activeColour,
+                colour:femaleCardColour,
+                cardChild: IconAdd(icon: FontAwesomeIcons.venus,label: "FEMALE",),
               ),
               )
             ],
@@ -63,46 +89,7 @@ class _InputPageState extends State<InputPage> {
   }
 }
 
-class IconAdd extends StatelessWidget {
-  const IconAdd({
-    Key key,
-  }) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Icon(
-          FontAwesomeIcons.mars,
-          size:80.0,
-        ),
-        SizedBox(
-          height: 15.0,
-        ),
-        Text(
-          "MALE",
-          style: TextStyle(
-          fontSize: 18.0,
-          color: Color(0xFFB3ABABFF),
-        ),)
-      ],
-    );
-  }
-}
-class Reusable extends StatelessWidget {
-  Reusable({@required this.colour, this.cardChild});
-final Color colour;
-final Widget cardChild;
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: cardChild,
-    margin: EdgeInsets.all(15.0),
-    decoration: BoxDecoration(
-color: colour,
-      borderRadius: BorderRadius.circular(10.0),
 
-    ),
-              );
-  }
-}
+
+
