@@ -10,6 +10,7 @@ enum Gender{
 }
 Gender selectedG;
 int height=180;
+int weight=60;
 
 class InputPage extends StatefulWidget {
   @override
@@ -81,18 +82,25 @@ selectedG=Gender.male;
 
                         ],
                       ),
-                      Slider(
-                        value: height.toDouble(),
-                        min: 120.0,
-                        max: 220.0,
-                        activeColor: Color(0xFFC496CC),
-                        inactiveColor: Color(0xFF8D8E98),
-                        onChanged: (double newVal){
-                          setState(() {
-                            height=newVal.round();
-                          });
-                        },
+                      SliderTheme(
+                        data: SliderTheme.of(context).copyWith(
+                          thumbColor: Color(0xFF570864),
+                          thumbShape: RoundSliderThumbShape(enabledThumbRadius: 15.0),
+                          overlayShape: RoundSliderOverlayShape(overlayRadius: 30.0)
+                        ),
+                        child: Slider(
+                          value: height.toDouble(),
+                          min: 120.0,
+                          max: 220.0,
+                          activeColor: Color(0xFFC496CC),
+                          inactiveColor: Color(0xFF8D8E98),
+                          onChanged: (double newVal){
+                            setState(() {
+                              height=newVal.round();
+                            });
+                          },
 
+                        ),
                       ),
                     ],
                   ),
@@ -101,6 +109,40 @@ selectedG=Gender.male;
           Expanded(child: Row(
             children: [
               Expanded(child: Reusable(
+                cardChild: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text("WEIGHT",
+                      style: kLabelTextStyle,
+                    ),
+                    Text(
+                      weight.toString(),
+                      style: kNumberTextStyle,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        FloatingActionButton(
+                          backgroundColor: Color(0xFF676E8E),
+                          child: Icon(
+                            Icons.add,
+                            color: Colors.white,
+                          ),
+
+                        ),
+                        SizedBox(width: 10.0),
+                        FloatingActionButton(
+                          backgroundColor: Color(0xFF676E8E),
+                          child: Icon(
+                            Icons.add,
+                            color: Colors.white,
+                          )
+                        )
+                      ],
+
+                    ),
+                  ],
+                ),
                   colour:kActiveColour,
               )),
               Expanded(child: Reusable(
