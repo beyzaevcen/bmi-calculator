@@ -1,31 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:bmi_calculator/icon_content.dart';
-import 'package:bmi_calculator/reusable_card.dart';
+import 'reusable_card.dart';
+import 'constants.dart';
+import 'icon_content.dart';
 
-const bottomContainerHeight=80.0;
-final activeColour=Color(0xFF1D1E33);
-const inActiveCardColour=Color(0xFF111328);
-final bottomContainerColour=Colors.purple[100];
+enum Gender{
+  male,
+  female,
+}
+Gender selectedG;
+int height=180;
 
 class InputPage extends StatefulWidget {
   @override
   _InputPageState createState() => _InputPageState();
 }
 class _InputPageState extends State<InputPage> {
-  Color maleCardColour=inActiveCardColour;
-  Color femaleCardColour=inActiveCardColour;
-  //1=male 2=female
-  void updateColour(int gender){
-if(gender==1){
-  if(maleCardColour==inActiveCardColour){
-    maleCardColour=activeColour;
-  }else{
-    maleCardColour=inActiveCardColour;
-  }
-}
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,51 +23,96 @@ if(gender==1){
         title: Text(
             "BMI CALCULATOR",
         ),
-        backgroundColor:activeColour,
+        backgroundColor:kActiveColour,
       ),
       body:Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Expanded(child: Row(
             children: [
-              Expanded(child: GestureDetector(
-                onTap: (){
-                 setState(() {
-                   updateColour(1);
-                 });
+              Expanded(child: Reusable(
+                onPress: (){
+                  setState(() {
+selectedG=Gender.male;
+                  });
                 },
-                child: Reusable(
-          colour:maleCardColour,
-                  cardChild: IconAdd(icon: FontAwesomeIcons.mars,label: "MALE",),
+          colour:selectedG==Gender.male?kActiveColour:kInActiveCardColour,
+                cardChild: IconAdd(
+                  icon: FontAwesomeIcons.mars,
+                  label: "MALE",
+                )
           ),
               ),
-              ),
               Expanded(child: Reusable(
-                colour:femaleCardColour,
-                cardChild: IconAdd(icon: FontAwesomeIcons.venus,label: "FEMALE",),
+                onPress: (){
+                  setState(() {
+                    selectedG=Gender.female;
+                  });
+                },
+                colour:selectedG==Gender.female?kActiveColour:kInActiveCardColour,
+                cardChild: IconAdd(
+                  icon: FontAwesomeIcons.venus,
+                  label: "FEMALE",
+                )
               ),
               )
             ],
           )),
-          Expanded(child: Row(
-            children: [Expanded(child: Reusable(
-                colour:activeColour,
-            ))],
-          )),
+          Expanded(
+              child:
+              Reusable(
+                colour: kActiveColour,
+                  cardChild: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text("HEIGHT",style: kLabelTextStyle,),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.baseline,
+                        textBaseline:TextBaseline.alphabetic ,//We should specify baseline otherwise it gives error
+                        children: [
+                          Text(height.toString(),
+                          style: kNumberTextStyle,
+                          ),
+                          Text(
+                            "cm",
+                            style: kLabelTextStyle,
+                          )
+
+                        ],
+                      ),
+                      Slider(
+                        value: height.toDouble(),
+                        min: 120.0,
+                        max: 220.0,
+                        activeColor: Color(0xFFC496CC),
+                        inactiveColor: Color(0xFF8D8E98),
+                        onChanged: (double newVal){
+                          setState(() {
+                            height=newVal.round();
+                          });
+                        },
+
+                      ),
+                    ],
+                  ),
+              )
+          ),
           Expanded(child: Row(
             children: [
               Expanded(child: Reusable(
-                  colour:activeColour,
+                  colour:kActiveColour,
               )),
               Expanded(child: Reusable(
-                  colour:activeColour,
+                  colour:kActiveColour,
               )),
             ],
           )),
           Container(
-            color: bottomContainerColour,
+            color: kBottomContainerColour,
             margin: EdgeInsets.only(top:10.0),
             width: double.infinity,
-            height: bottomContainerHeight,
+            height: kBottomContainerHeight,
             child: Expanded(
               child: Text(
                   "CALCULATE",),
@@ -88,8 +123,5 @@ if(gender==1){
     );
   }
 }
-
-
-
 
 
